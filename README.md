@@ -1,4 +1,4 @@
-# AI-Driven Knowledge Base for Customer Service (build by [AutoCode](https://autocode.one) in 20 minutes)
+# AI-Driven Knowledge Base for Customer Service (build by [AutoCode](https://autocode.work) in 20 minutes)
 
 ## Project Overview
 
