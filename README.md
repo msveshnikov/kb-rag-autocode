@@ -1,26 +1,123 @@
 # AI-Driven Knowledge Base for Customer Service
 
-## Overview
+## Project Overview
 
-This project implements a powerful AI-driven knowledge base (KB) to assist customer service agents in providing accurate and efficient responses across multiple channels (voice, email, chat) for a large financial institution with multiple lines of business.
+This project implements an advanced AI-driven knowledge base designed to assist customer service agents in a large financial institution. It leverages Claude 3.5 AI, Retrieval-Augmented Generation (RAG), and various microservices to provide accurate, efficient, and compliant responses across multiple communication channels.
 
-## Key Features
+### Key Features
 
 -   Natural language querying for agents
 -   Comprehensive coverage of business rules, norms, and processes
 -   Regular updates and legal vetting of content
--   Multi-language support
+-   Multi-language support with cultural nuance preservation
 -   Integration with existing customer service tools
--   Analytics and performance tracking
--   Feedback loop for continuous improvement
+-   Confidence scoring and hallucination prevention
+-   Caching for improved performance
+-   Analytics and feedback mechanisms
+-   Scalable and secure architecture
 
-## Technology Stack
+## Architecture
 
--   Claude 3.5 for AI processing
--   ES6, async/await, fetch (no axios)
--   RAG (Retrieval-Augmented Generation) for improved accuracy
--   Prompt caching for faster response times
--   Secure database for storing vetted information
+The project follows a microservices architecture, with the main application server orchestrating various specialized services:
+
+1. **Main Application Server (index.js)**: Central coordination point for request handling and service orchestration.
+2. **Claude AI Service (claude.js)**: Interfaces with Claude 3.5 for NLP and response generation.
+3. **RAG Service (rag.js)**: Implements Retrieval-Augmented Generation for enhanced accuracy.
+4. **Prompt Cache (promptCache.js)**: Caches frequent queries for improved performance.
+5. **Database Service (database.js)**: Manages secure storage and retrieval of vetted information.
+6. **Translation Service (translation.js)**: Handles multi-language support and cultural nuances.
+7. **Confidence Scorer (confidenceScorer.js)**: Evaluates response reliability.
+8. **Analytics Service (analytics.js)**: Tracks usage and generates insights.
+9. **Feedback Service (feedback.js)**: Manages agent feedback for continuous improvement.
+
+## Module Interactions
+
+1. Query received → Check prompt cache
+2. If not cached → RAG service retrieves relevant information
+3. Claude AI generates response based on query, retrieved info, and context
+4. Confidence scorer evaluates response quality
+5. Low confidence → Return fallback message
+6. Non-English queries → Translation service used before/after AI processing
+7. Successful responses cached
+8. All interactions logged by analytics service
+9. Agents provide feedback via feedback service
+
+## Installation and Setup
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables in `.env` file
+4. Start development server: `npm run dev`
+5. For production: `npm start`
+
+## API Endpoints
+
+-   POST `/query`: Submit a query
+-   POST `/feedback`: Submit feedback
+-   GET `/analytics`: Retrieve analytics report
+
+## Security and Compliance
+
+-   Helmet for HTTP security headers
+-   Authentication required for all endpoints
+-   CORS configured for approved origins
+-   Secure storage of sensitive data
+-   GDPR, CCPA, and regulatory compliance
+
+## Testing, Linting, and Formatting
+
+-   Run tests: `npm test`
+-   Lint code: `npm run lint`
+-   Format code: `npm run format`
+
+## New Design Considerations
+
+1. **Adaptive Learning System**
+
+    - Implement machine learning algorithms to continuously improve response accuracy based on feedback and usage patterns
+
+2. **Context-Aware Personalization**
+
+    - Develop a system to tailor responses based on customer history, preferences, and current interaction context
+
+3. **Proactive Issue Resolution**
+
+    - Create predictive models to identify potential customer issues before they escalate
+
+4. **Voice and Sentiment Analysis**
+
+    - Integrate voice recognition and sentiment analysis for enhanced customer understanding in voice channels
+
+5. **Blockchain for Audit Trail**
+
+    - Implement a blockchain-based system for maintaining an immutable audit trail of all knowledge base updates and usage
+
+6. **AI-Powered Visual Assistance**
+
+    - Develop capabilities to process and respond to image-based queries for visual product support
+
+7. **Gamification for Agent Training**
+
+    - Create a gamified learning system to incentivize and improve agent knowledge and performance
+
+8. **Dynamic Knowledge Graph**
+
+    - Implement a self-updating knowledge graph to visualize and manage complex relationships within the knowledge base
+
+9. **Federated Learning for Privacy**
+
+    - Explore federated learning techniques to improve AI models while preserving data privacy
+
+10. **Explainable AI Integration**
+
+    - Incorporate explainable AI techniques to provide reasoning behind AI-generated responses
+
+11. **Real-Time Language Model Fine-Tuning**
+
+    - Develop a system for continuous fine-tuning of language models based on new data and feedback
+
+12. **Multi-Modal Response Generation**
+    - Extend the system to generate responses in various formats (text, images, videos) based on query type and channel
 
 ## Project Structure
 
@@ -28,103 +125,31 @@ This project implements a powerful AI-driven knowledge base (KB) to assist custo
 .
 ├── index.js
 ├── package.json
-└── services/
-    ├── analytics.js
-    ├── claude.js
-    ├── confidenceScorer.js
-    ├── feedback.js
-    ├── promptCache.js
-    ├── rag.js
-    └── translation.js
+├── services/
+│   ├── analytics.js
+│   ├── claude.js
+│   ├── confidenceScorer.js
+│   ├── database.js
+│   ├── feedback.js
+│   ├── promptCache.js
+│   ├── rag.js
+│   └── translation.js
+├── middleware/
+│   ├── auth.js
+│   ├── errorHandler.js
+│   └── validation.js
+├── analytics.log
+└── error.log
 ```
-
-## Design Considerations
-
-1. Data Quality Assurance
-
-    - Implement a rigorous content validation process
-    - Establish a team for continuous content curation and updates
-
-2. Hallucination Prevention
-
-    - Utilize confidence scoring system (confidenceScorer.js)
-    - Implement human-in-the-loop verification for low-confidence answers
-
-3. User Experience
-
-    - Create an intuitive interface for agents to query the KB
-    - Provide context-aware suggestions based on customer interaction history
-
-4. Performance Optimization
-
-    - Implement caching mechanisms (promptCache.js)
-    - Use distributed computing for handling high query volumes
-
-5. Security and Compliance
-
-    - Ensure GDPR, CCPA, and other relevant regulatory compliance
-    - Implement role-based access control for sensitive information
-
-6. Multi-Language Support
-
-    - Utilize translation.js for machine translation services
-    - Maintain language-specific knowledge bases for cultural nuances
-
-7. Integration Capabilities
-
-    - Develop APIs for seamless integration with existing CRM systems
-    - Create plugins for popular customer service platforms
-
-8. Analytics and Reporting
-
-    - Use analytics.js for usage tracking and performance metrics
-    - Provide insights on common customer queries and agent performance
-
-9. Feedback Loop
-
-    - Incorporate agent feedback using feedback.js
-    - Implement a voting system for answer quality
-
-10. Scalability
-
-    - Design a microservices architecture for easy scaling
-    - Utilize cloud infrastructure for flexible resource allocation
-
-11. AI Model Management
-
-    - Implement versioning for Claude models (claude.js)
-    - Set up A/B testing for different AI configurations
-
-12. Knowledge Graph Integration
-
-    - Explore integration of knowledge graphs for enhanced context understanding
-    - Implement entity linking and relationship mapping
-
-13. Real-time Collaboration
-
-    - Develop features for agents to share and collaborate on complex queries
-    - Implement a system for escalating issues to subject matter experts
-
-14. Customization and Personalization
-
-    - Allow for company-specific customization of the knowledge base
-    - Implement agent-specific preferences and learning paths
-
-15. Ethical AI Considerations
-    - Develop guidelines for responsible AI use in customer service
-    - Implement bias detection and mitigation strategies
-
-## Getting Started
-
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Configure environment variables
-4. Run the development server: `npm run dev`
 
 ## Contributing
 
-Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+Please refer to the `CONTRIBUTING.md` file for guidelines on how to contribute to this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Support
+
+For questions or issues, please open an issue on the GitHub repository or contact the maintainers directly.
